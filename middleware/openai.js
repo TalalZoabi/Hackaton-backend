@@ -32,8 +32,7 @@ const filterPosts = async function (req, res, next) {
       prompt: generatePrompt(searchTerm),
       temperature: 0.6,
     });
-    const booleanResult =
-      completion.data.choices[0].text === "True." ? true : false;
+    const booleanResult = completion.data.choices[0].text === "\n\nTrue";
     res.status(200).json({ result: booleanResult });
   } catch (error) {
     // Consider adjusting the error handling logic for your use case
