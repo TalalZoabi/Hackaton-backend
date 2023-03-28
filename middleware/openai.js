@@ -18,12 +18,13 @@ const filterPosts = async function (req, res, next) {
     return;
   }
 
+  console.log(req.posts);
+
   if (!req.posts) {
     res.status(400).json([]);
     next();
+    return null;
   }
-
-  console.log(req.posts);
 
   const posts = req.posts.map((post) => post.title);
 
