@@ -6,6 +6,8 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 const filterPosts = async function (req, res, next) {
+  console.log("entered filter");
+
   if (!configuration.apiKey) {
     res.status(500).json({
       error: {
@@ -17,6 +19,7 @@ const filterPosts = async function (req, res, next) {
   }
 
   const posts = req.posts.map((post) => post.title);
+
   if (!posts || posts.length === 0) {
     res.status(400).json({
       error: {
@@ -39,7 +42,6 @@ const filterPosts = async function (req, res, next) {
       if (booleanResult) filteredPosts.push(req.posts[i]);
     }
     res.status(200).json(filteredPosts);
-
     next();
   } catch (error) {
     // Consider adjusting the error handling logic for your use case
