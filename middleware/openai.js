@@ -20,6 +20,7 @@ const filterPosts = async function (req, res, next) {
 
   if (!req.posts) {
     res.status(400).json([]);
+    next();
   }
 
   console.log(req.posts);
