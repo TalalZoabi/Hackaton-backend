@@ -3,6 +3,9 @@ const server = express();
 const bodyParser = require("body-parser");
 require("dotenv").config();
 const cors = require("cors");
+
+const port = process.env.PORT || 5000;
+
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(express.json());
 server.use(
@@ -11,7 +14,7 @@ server.use(
     credentials: true,
   })
 );
-server.use(require("./Route"));
-server.listen(5656, () => {
-  console.log(`server opening with port 5656`);
+server.use(require("./routes/searchRoute"));
+server.listen(port, () => {
+  console.log(`server opening with port ${port}`);
 });

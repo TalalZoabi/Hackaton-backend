@@ -1,5 +1,5 @@
 const express = require("express");
-const filterPosts = require("./middleware/openai");
+const filterPosts = require("../middleware/openai");
 const router = express.Router();
 const request = require("request");
 const cheerio = require("cheerio");
