@@ -69,13 +69,4 @@ function generatePrompt(postTitle) {
      "${postTitle}"`;
 }
 
-// is this post acceptible
-
-/* Answer only true or false if the following question satisfies the following conditions: 
-    1. does not contain hate speech
-    2. does not contain speech against peaceful coexistence
-    3, does not contains inappropriate language
-    4. suitable for children:
-    "The terrorist will be accused of rape, the commander of Gilboa prison will also be prosecuted"*/
-
 module.exports = filterPosts;
