@@ -18,6 +18,10 @@ const filterPosts = async function (req, res, next) {
     return;
   }
 
+  if (!req.posts) {
+    res.status(400).json([]);
+  }
+
   const posts = req.posts.map((post) => post.title);
 
   if (!posts || posts.length === 0) {
