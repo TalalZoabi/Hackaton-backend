@@ -1,11 +1,11 @@
-import { Configuration, OpenAIApi } from "openai";
+const { Configuration, OpenAIApi } = require("openai");
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
-export default async function (req, res) {
+const filterPosts = async function (str) {
   if (!configuration.apiKey) {
     res.status(500).json({
       error: {
@@ -32,8 +32,7 @@ export default async function (req, res) {
       prompt: generatePrompt(searchTerm),
       temperature: 0.6,
     });
-    const booleanResult =
-      completion.data.choices[0].text === "True." ? true : false;
+    const booleanResult = completion.data.choices[0].text === "\n\nTrue";
     res.status(200).json({ result: booleanResult });
   } catch (error) {
     // Consider adjusting the error handling logic for your use case
@@ -49,7 +48,8 @@ export default async function (req, res) {
       });
     }
   }
-}
+  next();
+};
 
 function generatePrompt(postTitle) {
   return `Answer only true or false if the following question satisfies the following conditions: 
@@ -68,3 +68,5 @@ function generatePrompt(postTitle) {
     3, does not contains inappropriate language
     4. suitable for children:
     "The terrorist will be accused of rape, the commander of Gilboa prison will also be prosecuted"*/
+
+module.exports = filterPosts;
