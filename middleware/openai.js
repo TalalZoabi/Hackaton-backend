@@ -17,7 +17,7 @@ export default async function (req, res) {
   }
 
   const searchTerm = req.body.search || "";
-  if (animal.trim().length === 0) {
+  if (searchTerm.trim().length === 0) {
     res.status(400).json({
       error: {
         message: "Please enter a valid search term",
