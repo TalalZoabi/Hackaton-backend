@@ -22,6 +22,8 @@ const filterPosts = async function (req, res, next) {
     res.status(400).json([]);
   }
 
+  console.log(req.posts);
+
   const posts = req.posts.map((post) => post.title);
 
   if (!posts || posts.length === 0) {
