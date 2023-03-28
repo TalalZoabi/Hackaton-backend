@@ -5,7 +5,7 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-const filterPosts = async function (req, res, next) {
+const filterPosts = async function (str) {
   if (!configuration.apiKey) {
     res.status(500).json({
       error: {
