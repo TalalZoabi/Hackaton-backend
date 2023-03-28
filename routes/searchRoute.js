@@ -97,7 +97,7 @@ const cheerio = require("cheerio");
 
 const subredditName = "minecraft";
 
-router.get("/search", async (req, res, next) => {
+router.post("/search", async (req, res, next) => {
   const url = "https://www.reddit.com/r/" + req.body.search;
   console.log("url", url);
   axios
