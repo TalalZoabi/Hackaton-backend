@@ -6,7 +6,6 @@ const request = require("request");
 const cheerio = require("cheerio");
 
 const puppeteer = require("puppeteer");
-const cheerio = require("cheerio");
 
 const fetchPosts = async (url) => {
   const browser = await puppeteer.launch();
