@@ -1,11 +1,11 @@
-import { Configuration, OpenAIApi } from "openai";
+const { Configuration, OpenAIApi } = require("openai");
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
-export default async function (req, res) {
+const filterPosts = async function (req, res, next) {
   if (!configuration.apiKey) {
     res.status(500).json({
       error: {
@@ -17,7 +17,7 @@ export default async function (req, res) {
   }
 
   const searchTerm = req.body.search || "";
-  if (animal.trim().length === 0) {
+  if (searchTerm.trim().length === 0) {
     res.status(400).json({
       error: {
         message: "Please enter a valid search term",
@@ -49,7 +49,8 @@ export default async function (req, res) {
       });
     }
   }
-}
+  next();
+};
 
 function generatePrompt(postTitle) {
   return `Answer only true or false if the following question satisfies the following conditions: 
@@ -68,3 +69,5 @@ function generatePrompt(postTitle) {
     3, does not contains inappropriate language
     4. suitable for children:
     "The terrorist will be accused of rape, the commander of Gilboa prison will also be prosecuted"*/
+
+module.exports = filterPosts;

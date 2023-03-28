@@ -1,7 +1,9 @@
 const express = require("express");
+const filterPosts = require("./middleware/openai");
 const router = express.Router();
 
-router.get('/',(req,res)=>{
-    res.send('Hello, World!');
+router.use(filterPosts);
+router.get("/search", (req, res) => {
+    
 });
 module.exports = router;
