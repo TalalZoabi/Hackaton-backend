@@ -6,8 +6,6 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 const filterPosts = async function (req, res, next) {
-  console.log("req", req.posts);
-
   if (!configuration.apiKey) {
     res.status(500).json({
       error: {
@@ -18,7 +16,7 @@ const filterPosts = async function (req, res, next) {
     return;
   }
 
-  const posts = req.posts;
+  const posts = req.posts.map((post) => post.title);
   if (!posts || posts.length === 0) {
     res.status(400).json({
       error: {
@@ -38,9 +36,8 @@ const filterPosts = async function (req, res, next) {
         temperature: 0.6,
       });
       const booleanResult = completion.data.choices[0].text === "\n\nTrue";
-      if (booleanResult) filteredPosts.push(posts[i]);
+      if (booleanResult) filteredPosts.push(req.posts[i]);
     }
-    console.log("Filter is done");
     res.status(200).json(filteredPosts);
 
     next();
@@ -64,7 +61,7 @@ function generatePrompt(postTitle) {
   return `Answer only true or false if the following question satisfies the following conditions: 
     1. does not contain hate speech
     2. does not contain speech against peaceful coexistence
-    3, does not contains inappropriate language
+    3. does not contains inappropriate language
     4. suitable for children:
      "${postTitle}"`;
 }
