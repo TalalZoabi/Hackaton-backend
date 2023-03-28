@@ -15,4 +15,3 @@ server.use(require("./Route"));
 server.listen(5656, () => {
   console.log(`server opening with port 5656`);
 });
-

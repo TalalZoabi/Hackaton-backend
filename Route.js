@@ -5,7 +5,7 @@ const request = require("request");
 const cheerio = require("cheerio");
 
 router.get("/search", (req, res, next) => {
-  const url = "https://www.reddit.com/r/minecraft"; // Replace with the URL of the page you want to scrape
+  const url = req.body.search; // Replace with the URL of the page you want to scrape
 
   request(url, (error, response, body) => {
     if (!error && response.statusCode === 200) {
@@ -13,11 +13,16 @@ router.get("/search", (req, res, next) => {
       const h3Texts = $("h3")
         .map((i, element) => $(element).text())
         .get();
-      res.json(filterPosts(h3Texts));
+      console.log(h3Texts);
+      req.posts = h3Texts;
+      //res.status(200).json(h3Texts);
+      next();
     } else {
       console.log(error);
     }
   });
 });
+
+router.use(filterPosts);
 
 module.exports = router;

@@ -5,7 +5,9 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-const filterPosts = async function (str) {
+const filterPosts = async function (req, res, next) {
+  console.log("req", req.posts);
+
   if (!configuration.apiKey) {
     res.status(500).json({
       error: {
@@ -16,8 +18,8 @@ const filterPosts = async function (str) {
     return;
   }
 
-  const searchTerm = req.body.search || "";
-  if (searchTerm.trim().length === 0) {
+  const posts = req.posts;
+  if (!posts || posts.length === 0) {
     res.status(400).json({
       error: {
         message: "Please enter a valid search term",
@@ -26,14 +28,22 @@ const filterPosts = async function (str) {
     return;
   }
 
+  let filteredPosts = [];
+
   try {
-    const completion = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: generatePrompt(searchTerm),
-      temperature: 0.6,
-    });
-    const booleanResult = completion.data.choices[0].text === "\n\nTrue";
-    res.status(200).json({ result: booleanResult });
+    for (let i = 0; i < posts.length; i++) {
+      const completion = await openai.createCompletion({
+        model: "text-davinci-003",
+        prompt: generatePrompt(posts[i]),
+        temperature: 0.6,
+      });
+      const booleanResult = completion.data.choices[0].text === "\n\nTrue";
+      if (booleanResult) filteredPosts.push(posts[i]);
+    }
+    console.log("Filter is done");
+    res.status(200).json(filteredPosts);
+
+    next();
   } catch (error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
@@ -48,7 +58,6 @@ const filterPosts = async function (str) {
       });
     }
   }
-  next();
 };
 
 function generatePrompt(postTitle) {
